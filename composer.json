@@ -1,0 +1,25 @@
+{
+  "name": "AniRace",
+  "type": "library",
+  "description": "",
+  "keywords": [],
+  "homepage": "http://tifenn-guillas.fr/",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Tifenn Guillas",
+      "email": "tifenn.guillas@gmail.com",
+      "homepage": "https://github.com/tifenn-guillas"
+    }
+  ],
+  "require": {
+  },
+  "autoload": {
+    "psr-4": {
+      "AniRace\\": "src/"
+    }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^6.2"
+  }
+}

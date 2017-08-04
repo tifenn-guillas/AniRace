@@ -1,0 +1,5 @@
+/.idea/
+create-images.sh
+Dockerfile
+docker-compose.yml
+/vendor
