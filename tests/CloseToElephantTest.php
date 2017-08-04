@@ -79,7 +79,7 @@ final class CloseToElephantTest extends TestCase
         $distanceBetweenAnimals = abs($horse->getProgress() - $elephant->getProgress());
         $appliedRules = [];
 
-        $closeToElephant = new \AniRace\Rules\CloseToElephant($history, $animals);
+        $closeToElephant = new CloseToElephant($history, $animals);
         $closeToElephant->applyRule($history);
 
         $this->assertInstanceOf(Horse::class, $animals[0]);
@@ -102,7 +102,7 @@ final class CloseToElephantTest extends TestCase
         $finalSpeedHorse = $horse->getSpeedInit() / (1 - 0.03);
         $speedElephant = $elephant->getSpeed();
 
-        $closeToElephant = new \AniRace\Rules\CloseToElephant($history, $animals);
+        $closeToElephant = new CloseToElephant($history, $animals);
         $closeToElephant->removeRule($animals[0]);
 
         $this->assertInstanceOf(Horse::class, $animals[0]);
