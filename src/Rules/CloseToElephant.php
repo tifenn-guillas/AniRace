@@ -8,11 +8,6 @@ use AniRace\Animal\Elephant;
 class CloseToElephant
 {
     /**
-     * @var array
-     */
-    private $history;
-
-    /**
      * @var Animal[]
      */
     private $animals;
@@ -24,12 +19,10 @@ class CloseToElephant
 
     /**
      * CloseToElephant constructor.
-     * @param array $history
      * @param Animal[] $animals
      */
-    public function __construct($history, $animals)
+    public function __construct($animals)
     {
-        $this->history = $history;
         $this->animals = $animals;
         $this->distance = 50;
     }
@@ -38,7 +31,7 @@ class CloseToElephant
      * @return array
      */
     public function applyRule(&$appliedOn) {
-        $appliedOn = [];
+        $appliedOn['CloseToElephant'] = [];
         if ($this->elephantExists()) {
             $indexElephant = $this->indexElephant();
             $elephant = $this->animals[$indexElephant];
@@ -48,7 +41,7 @@ class CloseToElephant
                 }
                 if ($this->isCloseToElephant($elephant, $animal)) {
                     $this->applyConstraint($animal);
-                    $appliedOn[] = $animal;
+                    $appliedOn['CloseToElephant'][] = $this->animals[$key];
                 }
             }
         }

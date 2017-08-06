@@ -35,14 +35,14 @@ class RulesManager
     public function __construct($animals)
     {
         $this->animals = $animals;
-        $this->closeToElephant = new CloseToElephant($this->appliedRules, $this->animals);
-        $this->elephantCloseToCarnivorous = new ElephantCloseToCarnivorous($this->appliedRules, $this->animals);
+        $this->closeToElephant = new CloseToElephant($this->animals);
+        $this->elephantCloseToCarnivorous = new ElephantCloseToCarnivorous($this->animals);
     }
 
     public function applyRules() {
         $this->removeRules();
-        $this->closeToElephant->applyRule($this->appliedRules['CloseToElephant']);
-//        $this->appliedRules = $this->elephantCloseToCarnivorous->applyRule();
+        $this->closeToElephant->applyRule($this->appliedRules);
+        $this->elephantCloseToCarnivorous->applyRule($this->appliedRules);
     }
 
     private function removeRules() {
