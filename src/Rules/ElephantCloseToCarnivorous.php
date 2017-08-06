@@ -8,34 +8,26 @@ use AniRace\Animal\Elephant;
 class ElephantCloseToCarnivorous
 {
     /**
-     * @var array
-     */
-    private $history;
-
-    /**
      * @var Animal[]
      */
     private $animals;
 
     /**
      * ElephantCloseToCarnivorous constructor.
-     * @param array $history
      * @param Animal[] $animals
      */
-    public function __construct($history, $animals)
+    public function __construct($animals)
     {
-        $this->history = $history;
         $this->animals = $animals;
     }
 
-    public function applyRule(&$appliedOn) {
-        $appliedOn = null;
-        if ($this->isAnimalsClose()) {
-            foreach ($this->history['CloseToElephant'] as $animal) {
+    public function applyRule(&$appliedRules) {
+        if ($this->isAnimalsClose($appliedRules)) {
+            foreach ($appliedRules['CloseToElephant'] as $key => $animal) {
                 if ($this->isCarnivorous($animal)) {
-                    $elephant = $this->searchElephant();
-                    $this->applyBonus($elephant);
-                    $appliedOn = $elephant;
+                    $indexElephant = $this->searchElephant();
+                    $this->applyBonus($this->animals[$indexElephant]);
+                    $appliedRules['ElephantCloseToCarnivorous'] = $this->animals[$indexElephant];
                     break;
                 }
             }
@@ -49,8 +41,12 @@ class ElephantCloseToCarnivorous
         $elephant->setSpeed($elephant->getSpeedInit() / (1 + 0.03));
     }
 
-    private function isAnimalsClose() {
-        if (array_key_exists('CloseToElephant', $this->history)) {
+    /**
+     * @param array $appliedRules
+     * @return bool
+     */
+    private function isAnimalsClose($appliedRules) {
+        if (array_key_exists('CloseToElephant', $appliedRules)) {
             return true;
         }
         return false;
@@ -71,9 +67,9 @@ class ElephantCloseToCarnivorous
      * @return Elephant
      */
     private function searchElephant() {
-        foreach ($this->animals as $animal) {
+        foreach ($this->animals as $key => $animal) {
             if ($animal instanceof Elephant) {
-                return $animal;
+                return $key;
             }
         }
     }
@@ -82,6 +78,6 @@ class ElephantCloseToCarnivorous
      * @param Elephant $elephant
      */
     private function applyBonus($elephant) {
-        $elephant->setSpeed($elephant->getSpeedInit() * (1 - 0.03));
+        $elephant->setSpeed($elephant->getSpeedInit() * (1 + 0.03));
     }
 }
