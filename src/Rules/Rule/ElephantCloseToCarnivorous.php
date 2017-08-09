@@ -1,33 +1,31 @@
 <?php
 
-namespace AniRace\Rules;
+namespace AniRace\Rules\Rule;
 
 use AniRace\Animal\Animal;
-use AniRace\Animal\Elephant;
+use AniRace\Animal\Breed\Elephant;
+use AniRace\Rules\Rule;
+use Doctrine\Common\Collections\ArrayCollection;
 
-class ElephantCloseToCarnivorous
+class ElephantCloseToCarnivorous extends Rule
 {
-    /**
-     * @var Animal[]
-     */
-    private $animals;
-
     /**
      * ElephantCloseToCarnivorous constructor.
      * @param Animal[] $animals
+     * @param ArrayCollection $appliedRules
      */
-    public function __construct($animals)
+    public function __construct($animals, $appliedRules)
     {
-        $this->animals = $animals;
+        parent::__construct($animals, $appliedRules);
     }
 
-    public function applyRule(&$appliedRules) {
-        if ($this->isAnimalsClose($appliedRules)) {
-            foreach ($appliedRules['CloseToElephant'] as $key => $animal) {
+    public function applyRule() {
+        if ($this->areAnimalsClose()) {
+            foreach ($this->appliedRules->get('CloseToElephant') as $key => $animal) {
                 if ($this->isCarnivorous($animal)) {
                     $indexElephant = $this->searchElephant();
                     $this->applyBonus($this->animals[$indexElephant]);
-                    $appliedRules['ElephantCloseToCarnivorous'] = $this->animals[$indexElephant];
+                    $this->appliedRules->set('ElephantCloseToCarnivorous', $this->animals[$indexElephant]);
                     break;
                 }
             }
@@ -42,11 +40,10 @@ class ElephantCloseToCarnivorous
     }
 
     /**
-     * @param array $appliedRules
      * @return bool
      */
-    private function isAnimalsClose($appliedRules) {
-        if (array_key_exists('CloseToElephant', $appliedRules)) {
+    private function areAnimalsClose() {
+        if ($this->appliedRules->containsKey('CloseToElephant')) {
             return true;
         }
         return false;

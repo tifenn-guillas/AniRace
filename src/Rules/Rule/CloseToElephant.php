@@ -1,17 +1,14 @@
 <?php
 
-namespace AniRace\Rules;
+namespace AniRace\Rules\Rule;
 
 use AniRace\Animal\Animal;
-use AniRace\Animal\Elephant;
+use AniRace\Animal\Breed\Elephant;
+use AniRace\Rules\Rule;
+use Doctrine\Common\Collections\ArrayCollection;
 
-class CloseToElephant
+class CloseToElephant extends Rule
 {
-    /**
-     * @var Animal[]
-     */
-    private $animals;
-
     /**
      * @var int
      */
@@ -20,18 +17,17 @@ class CloseToElephant
     /**
      * CloseToElephant constructor.
      * @param Animal[] $animals
+     * @param ArrayCollection $appliedRules
      */
-    public function __construct($animals)
+    public function __construct($animals, $appliedRules)
     {
-        $this->animals = $animals;
         $this->distance = 50;
+        parent::__construct($animals, $appliedRules);
     }
 
-    /**
-     * @return array
-     */
-    public function applyRule(&$appliedOn) {
-        $appliedOn['CloseToElephant'] = [];
+
+    public function applyRule() {
+        $appliedOn = [];
         if ($this->elephantExists()) {
             $indexElephant = $this->indexElephant();
             $elephant = $this->animals[$indexElephant];
@@ -41,8 +37,11 @@ class CloseToElephant
                 }
                 if ($this->isCloseToElephant($elephant, $animal)) {
                     $this->applyConstraint($animal);
-                    $appliedOn['CloseToElephant'][] = $this->animals[$key];
+                    $appliedOn[] = $this->animals[$key];
                 }
+            }
+            if (!empty($appliedOn)) {
+                $this->appliedRules->set('CloseToElephant', $appliedOn);
             }
         }
     }

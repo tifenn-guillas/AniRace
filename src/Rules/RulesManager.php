@@ -3,8 +3,11 @@
 namespace AniRace\Rules;
 
 use AniRace\Animal\Animal;
-use AniRace\Animal\Elephant;
-use SebastianBergmann\CodeCoverage\Report\PHP;
+use AniRace\Rules\Rule\CloseToElephant;
+use AniRace\Rules\Rule\ElephantCloseToCarnivorous;
+use AniRace\Rules\Rule\NotCloseToElephant;
+use AniRace\Rules\Rule\NotElephantCloseToCarnivorous;
+use Doctrine\Common\Collections\ArrayCollection;
 
 class RulesManager
 {
@@ -14,9 +17,9 @@ class RulesManager
     private $animals;
 
     /**
-     * @var array
+     * @var ArrayCollection
      */
-    private $appliedRules = [];
+    private $appliedRules;
 
     /**
      * @var CloseToElephant
@@ -24,9 +27,19 @@ class RulesManager
     private $closeToElephant;
 
     /**
+     * @var NotCloseToElephant
+     */
+    private $notCloseToElephant;
+
+    /**
      * @var ElephantCloseToCarnivorous
      */
     private $elephantCloseToCarnivorous;
+
+    /**
+     * @var NotElephantCloseToCarnivorous
+     */
+    private $notElephantCloseToCarnivorous;
 
     /**
      * RulesManager constructor.
@@ -35,29 +48,18 @@ class RulesManager
     public function __construct($animals)
     {
         $this->animals = $animals;
-        $this->closeToElephant = new CloseToElephant($this->animals);
-        $this->elephantCloseToCarnivorous = new ElephantCloseToCarnivorous($this->animals);
+        $this->appliedRules = new ArrayCollection([]);
+        $this->closeToElephant = new CloseToElephant($this->animals, $this->appliedRules);
+        $this->notCloseToElephant = new NotCloseToElephant($this->animals, $this->appliedRules);
+        $this->elephantCloseToCarnivorous = new ElephantCloseToCarnivorous($this->animals, $this->appliedRules);
+        $this->notElephantCloseToCarnivorous = new NotElephantCloseToCarnivorous($this->animals, $this->appliedRules);
     }
 
-    public function applyRules() {
-        $this->removeRules();
-        $this->closeToElephant->applyRule($this->appliedRules);
-        $this->elephantCloseToCarnivorous->applyRule($this->appliedRules);
-    }
-
-    private function removeRules() {
-        foreach ($this->appliedRules as $rule => $value) {
-            switch ($rule) {
-                case 'CloseToElephant':
-                    foreach ($value as $animal) {
-                        $this->closeToElephant->removeRule($animal);
-                    }
-                    break;
-                case 'ElephantCloseToCarnivorous':
-                    $this->elephantCloseToCarnivorous->removeRule($value);
-                    break;
-            }
-        }
-        $this->appliedRules = [];
+    public function applyRules()
+    {
+        $this->notElephantCloseToCarnivorous->applyRule();
+        $this->notCloseToElephant->applyRule();
+        $this->closeToElephant->applyRule();
+        $this->elephantCloseToCarnivorous->applyRule();
     }
 }

@@ -1,10 +1,11 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use \AniRace\Animal\Horse;
-use \AniRace\Animal\Elephant;
-use \AniRace\Animal\Leopard;
-use \AniRace\Rules\CloseToElephant;
+use \Doctrine\Common\Collections\ArrayCollection;
+use \AniRace\Animal\Breed\Horse;
+use \AniRace\Animal\Breed\Elephant;
+use \AniRace\Animal\Breed\Leopard;
+use \AniRace\Rules\Rule\CloseToElephant;
 
 /**
  * @covers CloseToElephant
@@ -13,7 +14,7 @@ final class CloseToElephantTest extends TestCase
 {
     public function testApplyRule()
     {
-        $history = [];
+        $appliedRules = new ArrayCollection([]);
         $horse = new Horse();
         $elephant = new Elephant();
         $horse->setProgress(10);
@@ -25,24 +26,23 @@ final class CloseToElephantTest extends TestCase
         $finalSpeedHorse = $horse->getSpeedInit() * (1 - 0.03);
         $speedElephant = $elephant->getSpeed();
         $distanceBetweenAnimals = abs($horse->getProgress() - $elephant->getProgress());
-        $appliedRules['CloseToElephant'][] = $animals[0];
 
-        $closeToElephant = new CloseToElephant($animals);
-        $closeToElephant->applyRule($history);
+        $closeToElephant = new CloseToElephant($animals, $appliedRules);
+        $closeToElephant->applyRule();
 
         $this->assertInstanceOf(Horse::class, $animals[0]);
         $this->assertEquals($finalSpeedHorse, $animals[0]->getSpeed());
         $this->assertInstanceOf(Elephant::class, $animals[1]);
         $this->assertEquals($speedElephant, $animals[1]->getSpeed());
         $this->assertTrue($distanceBetweenAnimals <= 50);
-        $this->assertEquals($appliedRules, $history, $canonicalize = true);
-
+        $this->assertTrue($appliedRules->containsKey('CloseToElephant'));
+        $this->assertEquals(array($horse), $appliedRules->get('CloseToElephant'), $canonicalize = true);
 
     }
 
     public function testNoElephant()
     {
-        $history = [];
+        $appliedRules = new ArrayCollection([]);
         $horse = new Horse();
         $leopard = new Leopard();
         $animals = array(
@@ -51,21 +51,20 @@ final class CloseToElephantTest extends TestCase
         );
         $speedHorse = $horse->getSpeed();
         $speedLeopard = $leopard->getSpeed();
-        $appliedRules['CloseToElephant'] = [];
 
-        $closeToElephant = new CloseToElephant($animals);
-        $closeToElephant->applyRule($history);
+        $closeToElephant = new CloseToElephant($animals, $appliedRules);
+        $closeToElephant->applyRule();
 
         $this->assertInstanceOf(Horse::class, $animals[0]);
         $this->assertEquals($speedHorse, $animals[0]->getSpeed());
         $this->assertInstanceOf(Leopard::class, $animals[1]);
         $this->assertEquals($speedLeopard, $animals[1]->getSpeed());
-        $this->assertEquals($appliedRules, $history, $canonicalize = true);
+        $this->assertFalse($appliedRules->containsKey('CloseToElephant'));
     }
 
     public function testNotCloseToElephant()
     {
-        $history = [];
+        $appliedRules = new ArrayCollection([]);
         $horse = new Horse();
         $elephant = new Elephant();
         $horse->setProgress(10);
@@ -77,48 +76,27 @@ final class CloseToElephantTest extends TestCase
         $speedHorse = $horse->getSpeed();
         $speedElephant = $elephant->getSpeed();
         $distanceBetweenAnimals = abs($horse->getProgress() - $elephant->getProgress());
-        $appliedRules['CloseToElephant'] = [];
 
-        $closeToElephant = new CloseToElephant($animals);
-        $closeToElephant->applyRule($history);
+        $closeToElephant = new CloseToElephant($animals, $appliedRules);
+        $closeToElephant->applyRule();
+        var_dump($appliedRules);
 
         $this->assertInstanceOf(Horse::class, $animals[0]);
         $this->assertEquals($speedHorse, $animals[0]->getSpeed());
         $this->assertInstanceOf(Elephant::class, $animals[1]);
         $this->assertEquals($speedElephant, $animals[1]->getSpeed());
         $this->assertTrue($distanceBetweenAnimals >= 50);
-        $this->assertEquals($appliedRules, $history, $canonicalize = true);
-    }
-
-    public function testRemoveRule()
-    {
-        $horse = new Horse();
-        $elephant = new Elephant();
-        $animals = array(
-            $horse,
-            $elephant
-        );
-        $finalSpeedHorse = $horse->getSpeedInit() / (1 - 0.03);
-        $speedElephant = $elephant->getSpeed();
-
-        $closeToElephant = new CloseToElephant($animals);
-        $closeToElephant->removeRule($animals[0]);
-
-        $this->assertInstanceOf(Horse::class, $animals[0]);
-        $this->assertEquals($finalSpeedHorse, $animals[0]->getSpeed());
-        $this->assertInstanceOf(Elephant::class, $animals[1]);
-        $this->assertEquals($speedElephant, $animals[1]->getSpeed());
+        $this->assertFalse($appliedRules->containsKey('CloseToElephant'));
     }
 
     public function testNoAnimals()
     {
-        $history = [];
+        $appliedRules = new ArrayCollection([]);
         $animals = [];
-        $appliedRules['CloseToElephant'] = [];
 
-        $closeToElephant = new CloseToElephant($animals);
-        $closeToElephant->applyRule($history);
+        $closeToElephant = new CloseToElephant($animals, $appliedRules);
+        $closeToElephant->applyRule();
 
-        $this->assertEquals($appliedRules, $history);
+        $this->assertFalse($appliedRules->containsKey('CloseToElephant'));
     }
 }

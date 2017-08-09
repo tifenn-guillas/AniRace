@@ -1,6 +1,8 @@
 <?php
 
-namespace AniRace\Animal;
+namespace AniRace\Animal\Breed;
+
+use AniRace\Animal\Animal;
 
 class Elephant extends Animal
 {
