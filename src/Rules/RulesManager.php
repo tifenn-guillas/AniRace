@@ -22,44 +22,31 @@ class RulesManager
     private $appliedRules;
 
     /**
-     * @var CloseToElephant
+     * @var array
      */
-    private $closeToElephant;
+    private $rules;
 
-    /**
-     * @var NotCloseToElephant
-     */
-    private $notCloseToElephant;
-
-    /**
-     * @var ElephantCloseToCarnivorous
-     */
-    private $elephantCloseToCarnivorous;
-
-    /**
-     * @var NotElephantCloseToCarnivorous
-     */
-    private $notElephantCloseToCarnivorous;
 
     /**
      * RulesManager constructor.
      * @param Animal[] $animals
      */
-    public function __construct($animals)
+    public function __construct(array $animals)
     {
         $this->animals = $animals;
         $this->appliedRules = new ArrayCollection([]);
-        $this->closeToElephant = new CloseToElephant($this->animals, $this->appliedRules);
-        $this->notCloseToElephant = new NotCloseToElephant($this->animals, $this->appliedRules);
-        $this->elephantCloseToCarnivorous = new ElephantCloseToCarnivorous($this->animals, $this->appliedRules);
-        $this->notElephantCloseToCarnivorous = new NotElephantCloseToCarnivorous($this->animals, $this->appliedRules);
+        $this->rules = array(
+            new NotElephantCloseToCarnivorous($this->animals, $this->appliedRules),
+            new NotCloseToElephant($this->animals, $this->appliedRules),
+            new CloseToElephant($this->animals, $this->appliedRules),
+            new ElephantCloseToCarnivorous($this->animals, $this->appliedRules),
+        );
     }
 
     public function applyRules()
     {
-        $this->notElephantCloseToCarnivorous->applyRule();
-        $this->notCloseToElephant->applyRule();
-        $this->closeToElephant->applyRule();
-        $this->elephantCloseToCarnivorous->applyRule();
+        foreach ($this->rules as $rule) {
+            $rule->applyRule();
+        }
     }
 }

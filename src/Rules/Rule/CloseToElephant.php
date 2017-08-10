@@ -14,15 +14,16 @@ class CloseToElephant extends Rule
      */
     private $distance;
 
+
     /**
      * CloseToElephant constructor.
      * @param Animal[] $animals
      * @param ArrayCollection $appliedRules
      */
-    public function __construct($animals, $appliedRules)
+    public function __construct(array $animals, ArrayCollection $appliedRules)
     {
-        $this->distance = 50;
         parent::__construct($animals, $appliedRules);
+        $this->distance = 50;
     }
 
 
@@ -30,6 +31,7 @@ class CloseToElephant extends Rule
         $appliedOn = [];
         if ($this->elephantExists()) {
             $indexElephant = $this->indexElephant();
+            /** @var Elephant $elephant */
             $elephant = $this->animals[$indexElephant];
             foreach ($this->animals as $key => $animal) {
                 if ($key == $indexElephant) {
@@ -49,7 +51,7 @@ class CloseToElephant extends Rule
     /**
      * @param Animal $animal
      */
-    public function removeRule($animal) {
+    public function removeRule(Animal $animal) {
         $animal->setSpeed($animal->getSpeedInit() / (1 - 0.03));
     }
 
@@ -81,7 +83,7 @@ class CloseToElephant extends Rule
      * @param Animal $animal
      * @return bool
      */
-    private function isCloseToElephant($elephant, $animal) {
+    private function isCloseToElephant(Elephant $elephant, Animal $animal) {
         $d = abs($elephant->getProgress() - $animal->getProgress());
         if ($d < $this->distance) {
             return true;
@@ -92,7 +94,7 @@ class CloseToElephant extends Rule
     /**
      * @param Animal $animal
      */
-    private function applyConstraint($animal) {
+    private function applyConstraint(Animal $animal) {
         $animal->setSpeed($animal->getSpeedInit() * (1 - 0.03));
     }
 }

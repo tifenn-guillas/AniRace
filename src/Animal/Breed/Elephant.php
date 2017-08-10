@@ -11,9 +11,9 @@ class Elephant extends Animal
      */
     public function __construct()
     {
-        $this->setStamina(50);
-        $this->setSpeed(30);
-        $this->setDiet('herbivorous');
+        $this->stamina = 50;
+        $this->speed = 30;
+        $this->diet ='herbivorous';
         parent::__construct();
     }
 }

@@ -14,17 +14,20 @@ class ElephantCloseToCarnivorous extends Rule
      * @param Animal[] $animals
      * @param ArrayCollection $appliedRules
      */
-    public function __construct($animals, $appliedRules)
+    public function __construct(array $animals, ArrayCollection $appliedRules)
     {
         parent::__construct($animals, $appliedRules);
     }
+
 
     public function applyRule() {
         if ($this->areAnimalsClose()) {
             foreach ($this->appliedRules->get('CloseToElephant') as $key => $animal) {
                 if ($this->isCarnivorous($animal)) {
                     $indexElephant = $this->searchElephant();
-                    $this->applyBonus($this->animals[$indexElephant]);
+                    /** @var Elephant $elephant */
+                    $elephant = $this->animals[$indexElephant];
+                    $this->applyBonus($elephant);
                     $this->appliedRules->set('ElephantCloseToCarnivorous', $this->animals[$indexElephant]);
                     break;
                 }
@@ -35,7 +38,7 @@ class ElephantCloseToCarnivorous extends Rule
     /**
      * @param Elephant $elephant
      */
-    public function removeRule($elephant) {
+    public function removeRule(Elephant $elephant) {
         $elephant->setSpeed($elephant->getSpeedInit() / (1 + 0.03));
     }
 
@@ -53,7 +56,7 @@ class ElephantCloseToCarnivorous extends Rule
      * @param Animal $animal
      * @return bool
      */
-    private function isCarnivorous($animal) {
+    private function isCarnivorous(Animal $animal) {
         if ($animal->getDiet() == 'carnivorous') {
             return true;
         }
@@ -61,7 +64,7 @@ class ElephantCloseToCarnivorous extends Rule
     }
 
     /**
-     * @return Elephant
+     * @return int
      */
     private function searchElephant() {
         foreach ($this->animals as $key => $animal) {
@@ -74,7 +77,7 @@ class ElephantCloseToCarnivorous extends Rule
     /**
      * @param Elephant $elephant
      */
-    private function applyBonus($elephant) {
+    private function applyBonus(Elephant $elephant) {
         $elephant->setSpeed($elephant->getSpeedInit() * (1 + 0.03));
     }
 }

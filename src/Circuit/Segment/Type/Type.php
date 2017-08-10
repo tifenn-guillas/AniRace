@@ -7,7 +7,7 @@ abstract class Type
     /**
      * @var string
      */
-    private $type ;
+    protected $type ;
 
 
     /**
@@ -22,7 +22,7 @@ abstract class Type
      * @param string $type
      * @return Type
      */
-    public function setType($type)
+    public function setType(string $type)
     {
         $this->type = $type;
         return $this;

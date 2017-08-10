@@ -6,7 +6,7 @@ use AniRace\Animal\Animal;
 use AniRace\Animal\Breed\Horse;
 use AniRace\Animal\Breed\Elephant;
 use AniRace\Animal\Breed\Leopard;
-use AniRace\Circuit\CircuitManager;
+use AniRace\Circuit\Circuit;
 use AniRace\Rules\RulesManager;
 
 class Race
@@ -32,9 +32,9 @@ class Race
     private $rulesManager;
 
     /**
-     * @var CircuitManager
+     * @var Circuit
      */
-    private $circuitManager;
+    private $circuit;
 
 
     /**
@@ -49,8 +49,9 @@ class Race
         );
         $this->nbAnimals = count($this->animals);
         $this->rulesManager = new RulesManager($this->animals);
-        $this->circuitManager = new CircuitManager();
+        $this->circuit = new Circuit();
     }
+
 
     public function run() {
         while (count($this->ranking) < $this->nbAnimals) {
@@ -70,7 +71,7 @@ class Race
     private function checkProgress() {
         // TODO: if more than 1 animal finish the race at the same time ?
         foreach ($this->animals as $key => $animal) {
-            if (($animal->getProgress() >= $this->circuitManager->getSize())) {
+            if (($animal->getProgress() >= $this->circuit->getSize())) {
                 array_push($this->ranking, $animal);
                 unset($this->animals[$key]);
             }

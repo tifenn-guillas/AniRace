@@ -22,7 +22,7 @@ abstract class Rule
      * @param Animal[] $animals
      * @param ArrayCollection $appliedRules
      */
-    public function __construct($animals, $appliedRules)
+    public function __construct(array $animals, ArrayCollection $appliedRules)
     {
         $this->animals = $animals;
         $this->appliedRules = $appliedRules;

@@ -9,6 +9,6 @@ class Mud extends Type
      */
     public function __construct()
     {
-        $this->setType('mud');
+        $this->type = 'mud';
     }
 }

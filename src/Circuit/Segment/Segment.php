@@ -34,7 +34,7 @@ class Segment
      * @param int $size
      * @return Segment
      */
-    public function setSize($size)
+    public function setSize(int $size)
     {
         $this->size = $size;
         return $this;
@@ -52,7 +52,7 @@ class Segment
      * @param Type $type
      * @return Segment
      */
-    public function setType($type)
+    public function setType(Type $type)
     {
         $this->type = $type;
         return $this;
@@ -70,7 +70,7 @@ class Segment
      * @param Shape $shape
      * @return Segment
      */
-    public function setShape($shape)
+    public function setShape(Shape $shape)
     {
         $this->shape = $shape;
         return $this;

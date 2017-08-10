@@ -7,7 +7,7 @@ abstract class Shape
     /**
      * @var string
      */
-    private $shape;
+    protected $shape;
 
 
     /**
@@ -19,10 +19,10 @@ abstract class Shape
     }
 
     /**
-     * @param $shape
+     * @param string $shape
      * @return Shape
      */
-    public function setShape($shape)
+    public function setShape(string $shape)
     {
         $this->shape = $shape;
         return $this;

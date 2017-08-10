@@ -7,7 +7,7 @@ abstract class Animal
     /**
      * @var float
      */
-    private $stamina;
+    protected $stamina;
 
     /**
      * @var int
@@ -17,7 +17,7 @@ abstract class Animal
     /**
      * @var float
      */
-    private $speed;
+    protected $speed;
 
     /**
      * @var int
@@ -32,7 +32,7 @@ abstract class Animal
     /**
      * @var string
      */
-    private $diet;
+    protected $diet;
 
     /**
      * Animal constructor.
@@ -56,7 +56,7 @@ abstract class Animal
      * @param float $stamina
      * @return Animal
      */
-    public function setStamina($stamina)
+    public function setStamina(float $stamina)
     {
         $this->stamina = $stamina;
         return $this;
@@ -64,7 +64,7 @@ abstract class Animal
 
     public function checkStamina()
     {
-        // TODO: check avec les regles de l'elephant
+        // TODO: check with elephant rules
         if ($this->speed == $this->speedInit) {
             $this->decreaseStamina();
         } else {
@@ -120,7 +120,7 @@ abstract class Animal
      * @param float $speed
      * @return Animal
      */
-    public function setSpeed($speed)
+    public function setSpeed(float $speed)
     {
         $this->speed = $speed;
         return $this;
@@ -143,10 +143,10 @@ abstract class Animal
     }
 
     /**
-     * @param $progress
+     * @param float $progress
      * @return Animal
      */
-    public function setProgress($progress)
+    public function setProgress(float $progress)
     {
         $this->progress = $progress;
         return $this;
@@ -169,7 +169,7 @@ abstract class Animal
      * @param string $diet
      * @return Animal
      */
-    public function setDiet($diet)
+    public function setDiet(string $diet)
     {
         $this->diet = $diet;
         return $this;

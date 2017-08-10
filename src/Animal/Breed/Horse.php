@@ -11,9 +11,9 @@ class Horse extends Animal
      */
     public function __construct()
     {
-        $this->setStamina(100);
-        $this->setSpeed(20);
-        $this->setDiet('herbivorous');
+        $this->stamina = 100;
+        $this->speed = 20;
+        $this->diet ='herbivorous';
         parent::__construct();
     }
 }

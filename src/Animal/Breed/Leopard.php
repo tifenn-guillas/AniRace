@@ -11,9 +11,9 @@ class Leopard extends Animal
      */
     public function __construct()
     {
-        $this->setStamina(10);
-        $this->setSpeed(90);
-        $this->setDiet('carnivorous');
+        $this->stamina = 10;
+        $this->speed = 90;
+        $this->diet ='carnivorous';
         parent::__construct();
     }
 }

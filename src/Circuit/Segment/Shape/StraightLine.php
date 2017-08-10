@@ -9,6 +9,6 @@ class StraightLine extends Shape
      */
     public function __construct()
     {
-        $this->setShape('Straight line');
+        $this->shape = 'Straight line';
     }
 }

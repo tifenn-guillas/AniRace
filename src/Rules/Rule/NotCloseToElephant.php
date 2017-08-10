@@ -13,7 +13,7 @@ class NotCloseToElephant extends Rule
      * @param Animal[] $animals
      * @param ArrayCollection $appliedRules
      */
-    public function __construct($animals, $appliedRules)
+    public function __construct(array $animals, ArrayCollection $appliedRules)
     {
         parent::__construct($animals, $appliedRules);
     }
@@ -31,7 +31,7 @@ class NotCloseToElephant extends Rule
     /**
      * @param Animal $animal
      */
-    private function applyConstraint($animal) {
+    private function applyConstraint(Animal $animal) {
         $animal->setSpeed($animal->getSpeedInit() / (1 - 0.03));
     }
 }
