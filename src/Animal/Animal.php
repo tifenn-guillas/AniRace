@@ -2,8 +2,15 @@
 
 namespace AniRace\Animal;
 
-abstract class Animal
+use \JsonSerializable;
+
+abstract class Animal implements JsonSerializable
 {
+    /**
+     * @var string
+     */
+    protected $breed;
+
     /**
      * @var float
      */
@@ -173,5 +180,10 @@ abstract class Animal
     {
         $this->diet = $diet;
         return $this;
+    }
+
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
     }
 }

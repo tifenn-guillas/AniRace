@@ -36,6 +36,8 @@ class Race
      */
     private $circuit;
 
+    private $json;
+
 
     /**
      * RaceManager constructor.
@@ -50,16 +52,23 @@ class Race
         $this->nbAnimals = count($this->animals);
         $this->rulesManager = new RulesManager($this->animals);
         $this->circuit = new Circuit();
+        $this->json = fopen('./race.json', 'w');
     }
 
 
     public function run() {
+        $i = 0;
+        fwrite($this->json, '[');
         while (count($this->ranking) < $this->nbAnimals) {
             $this->rulesManager->applyRules();
             $this->progress();
             $this->checkProgress();
+            $this->toJson($i);
+            $i++;
         }
         $this->prettyPrint();
+        fwrite($this->json, ']');
+        fclose($this->json);
     }
 
     private function progress() {
@@ -75,6 +84,24 @@ class Race
                 array_push($this->ranking, $animal);
                 unset($this->animals[$key]);
             }
+        }
+    }
+
+    /**
+     * @param int $i
+     */
+    private function toJson(int $i) {
+        $json = '{"iteration ' . $i . '" : [';
+        $json .= '{"animals" : ';
+        $json .= json_encode($this->animals);
+        $json .= '},';
+        $json .= '{"applied rules" : ';
+        $json .= json_encode($this->rulesManager->getAppliedRules());
+        $json .= '}';
+        $json .= ']}';
+        fwrite($this->json, $json);
+        if (!empty($this->animals)) {
+            fwrite($this->json, ',');
         }
     }
 

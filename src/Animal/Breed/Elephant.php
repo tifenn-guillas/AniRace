@@ -11,6 +11,7 @@ class Elephant extends Animal
      */
     public function __construct()
     {
+        $this->breed = 'Elephant';
         $this->stamina = 50;
         $this->speed = 30;
         $this->diet ='herbivorous';

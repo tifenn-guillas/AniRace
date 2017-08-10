@@ -11,6 +11,7 @@ class Horse extends Animal
      */
     public function __construct()
     {
+        $this->breed = 'Horse';
         $this->stamina = 100;
         $this->speed = 20;
         $this->diet ='herbivorous';

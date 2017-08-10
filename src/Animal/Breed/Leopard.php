@@ -11,6 +11,7 @@ class Leopard extends Animal
      */
     public function __construct()
     {
+        $this->breed = 'Leopard';
         $this->stamina = 10;
         $this->speed = 90;
         $this->diet ='carnivorous';

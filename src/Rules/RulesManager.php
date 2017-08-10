@@ -49,4 +49,12 @@ class RulesManager
             $rule->applyRule();
         }
     }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getAppliedRules()
+    {
+        return $this->appliedRules->toArray();
+    }
 }
