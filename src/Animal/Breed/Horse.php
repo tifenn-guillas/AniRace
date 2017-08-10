@@ -11,10 +11,12 @@ class Horse extends Animal
      */
     public function __construct()
     {
+        parent::__construct();
         $this->breed = 'Horse';
         $this->stamina = 100;
+        $this->staminaMax = 100;
         $this->speed = 20;
+        $this->speedInit = 20;
         $this->diet ='herbivorous';
-        parent::__construct();
     }
 }

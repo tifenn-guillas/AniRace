@@ -17,9 +17,19 @@ abstract class Animal implements JsonSerializable
     protected $stamina;
 
     /**
-     * @var int
+     * @var float
      */
-    private $staminaMax;
+    protected $staminaMax;
+
+    /**
+     * @var float
+     */
+    protected $staminaUp;
+
+    /**
+     * @var float
+     */
+    protected $staminaDown;
 
     /**
      * @var float
@@ -27,9 +37,14 @@ abstract class Animal implements JsonSerializable
     protected $speed;
 
     /**
-     * @var int
+     * @var float
      */
-    private $speedInit;
+    protected $speedInit;
+
+    /**
+     * @var bool
+     */
+    private $isUp;
 
     /**
      * @var float
@@ -46,9 +61,10 @@ abstract class Animal implements JsonSerializable
      */
     public function __construct()
     {
-        $this->staminaMax = $this->stamina;
-        $this->speedInit = $this->speed;
         $this->progress = 0;
+        $this->isUp = true;
+        $this->staminaUp = 0.5;
+        $this->staminaDown = 1;
     }
 
     /**
@@ -71,8 +87,7 @@ abstract class Animal implements JsonSerializable
 
     public function checkStamina()
     {
-        // TODO: check with elephant rules
-        if ($this->speed == $this->speedInit) {
+        if ($this->isUp) {
             $this->decreaseStamina();
         } else {
             $this->increaseStamina();
@@ -85,7 +100,7 @@ abstract class Animal implements JsonSerializable
     private function decreaseStamina()
     {
         if ($this->stamina > 0) {
-            $this->stamina -= 1;
+            $this->stamina -= $this->staminaDown;
             if ($this->stamina == 0) {
                 $this->speed = $this->speed/2;
             }
@@ -99,20 +114,12 @@ abstract class Animal implements JsonSerializable
     private function increaseStamina()
     {
         if ($this->stamina < $this->staminaMax) {
-            $this->stamina += 0.5;
+            $this->stamina += $this->staminaUp;
             if ($this->stamina == $this->staminaMax) {
                 $this->speed = $this->speedInit;
             }
         }
         return $this->stamina;
-    }
-
-    /**
-     * @return int
-     */
-    public function getStaminaMax()
-    {
-        return $this->staminaMax;
     }
 
     /**
@@ -131,14 +138,6 @@ abstract class Animal implements JsonSerializable
     {
         $this->speed = $speed;
         return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getSpeedInit()
-    {
-        return $this->speedInit;
     }
 
     /**
@@ -185,5 +184,41 @@ abstract class Animal implements JsonSerializable
     public function jsonSerialize()
     {
         return get_object_vars($this);
+    }
+
+    /**
+     * @return float
+     */
+    public function getStaminaMax()
+    {
+        return $this->staminaMax;
+    }
+
+    /**
+     * @param float $staminaMax
+     * @return Animal
+     */
+    public function setStaminaMax(float $staminaMax)
+    {
+        $this->staminaMax = $staminaMax;
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getSpeedInit()
+    {
+        return $this->speedInit;
+    }
+
+    /**
+     * @param float $speedInit
+     * @return Animal
+     */
+    public function setSpeedInit(float $speedInit)
+    {
+        $this->speedInit = $speedInit;
+        return $this;
     }
 }
