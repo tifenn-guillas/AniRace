@@ -79,7 +79,6 @@ final class CloseToElephantTest extends TestCase
 
         $closeToElephant = new CloseToElephant($animals, $appliedRules);
         $closeToElephant->applyRule();
-        var_dump($appliedRules);
 
         $this->assertInstanceOf(Horse::class, $animals[0]);
         $this->assertEquals($speedHorse, $animals[0]->getSpeed());

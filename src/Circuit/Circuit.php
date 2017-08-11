@@ -2,6 +2,7 @@
 
 namespace AniRace\Circuit;
 
+use AniRace\Animal\Animal;
 use AniRace\Circuit\Segment\Segment;
 use AniRace\Circuit\Segment\Shape\StraightLine;
 use AniRace\Circuit\Segment\Type\Mud;
@@ -20,10 +21,16 @@ class Circuit
     private $segments;
 
     /**
+     * @var Animal[]
+     */
+    private $animals;
+
+    /**
      * Circuit constructor.
+     * @param Animal[] $animals
      * @throws \Exception
      */
-    public function __construct()
+    public function __construct(array $animals)
     {
         $segment1 = new Segment();
         $segment1->setType(new Mud())->setShape(new StraightLine())->setSize(4000);
@@ -38,6 +45,7 @@ class Circuit
             throw new \Exception('Total size of segments is different than the size of the circuit');
         }
         $this->segments = $segments;
+        $this->animals = $animals;
     }
 
 
@@ -73,5 +81,35 @@ class Circuit
     {
         $this->size = $size;
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAnimalsPosition() {
+        $positions = [];
+        $d = 0;
+        foreach ($this->segments as $key => $segment) {
+            $seg = ['segment' => array(
+                $segment->getSize(),
+                $segment->getType()->getType(),
+                $segment->getShape()->getShape())];
+            $animals['Animals'] = [];
+            $segmentStart = $d;
+            $segmentEnd = $d + $segment->getSize();
+            foreach ($this->animals as $animal) {
+                if (($animal->getProgress() >= $segmentStart) and ($animal->getProgress() < $segmentEnd)) {
+                    $animals['Animals'][] = array(
+                        $animal->getBreed(),
+                        $animal->getProgress());
+                }
+            }
+            $positions["Segment $key"] = array(
+                $seg,
+                $animals
+            );
+            $d += $segment->getSize();
+        }
+        return $positions;
     }
 }

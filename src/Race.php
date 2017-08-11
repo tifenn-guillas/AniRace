@@ -51,7 +51,7 @@ class Race
         );
         $this->nbAnimals = count($this->animals);
         $this->rulesManager = new RulesManager($this->animals);
-        $this->circuit = new Circuit();
+        $this->circuit = new Circuit($this->animals);
         $this->json = fopen('./race.json', 'w');
     }
 
@@ -91,12 +91,16 @@ class Race
      * @param int $i
      */
     private function toJson(int $i) {
+//        $animalPosition = $this->circuit->getAnimalsPosition();
         $json = '{"iteration ' . $i . '" : [';
         $json .= '{"animals" : ';
         $json .= json_encode($this->animals);
         $json .= '},';
         $json .= '{"applied rules" : ';
         $json .= json_encode($this->rulesManager->getAppliedRules());
+        $json .= '},';
+        $json .= '{"animals position" : ';
+        $json .= json_encode($this->circuit->getAnimalsPosition());
         $json .= '}';
         $json .= ']}';
         fwrite($this->json, $json);

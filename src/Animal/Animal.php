@@ -221,4 +221,12 @@ abstract class Animal implements JsonSerializable
         $this->speedInit = $speedInit;
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    public function getBreed()
+    {
+        return $this->breed;
+    }
 }
